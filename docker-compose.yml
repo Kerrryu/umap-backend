@@ -1,16 +1,5 @@
 version: "3"
 services:
-  app:
-    image: sebastianrp/umap-adonis-js:1.0.0
-    volumes:
-      - ./node:/var/www
-    depends_on:
-      - db
-    ports:
-      - 8080:80
-    networks:
-      - back
-
   db:
     image: mysql:5.7
     restart: always
