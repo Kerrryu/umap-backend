@@ -7,6 +7,10 @@ class BuildingType extends Model {
     buildings () {
         return this.hasMany('App/Models/Building', 'id', 'type')
     }
+
+    subtypes () {
+        return this.hasMany('App/Models/BuildingSubtype', 'id', 'buildingtype_id')
+    }
 }
 
 module.exports = BuildingType

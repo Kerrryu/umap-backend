@@ -17,6 +17,7 @@
 const Route = use('Route')
 const Building = use('App/Models/Building')
 const BuildingType = use('App/Models/BuildingType')
+const BuildingSubtype = use('App/Models/BuildingSubtype')
 
 Route.on('/').render('welcome')
 
@@ -34,8 +35,13 @@ Route.get('/buildings', async () => {
     return buildings;
 });
 
-Route.get('/buildinglocation', async () => {
-    const building = await Building.find(1)
+Route.get('/buildings/location/', async ({ request }) => {
+    let building = null;
+    if(request.get('id') != null) {
+        const buildingID = request.get('id').id;
+        building = await Building.find(buildingID);
+    }
+
     return await building.location().fetch()
 });
 
@@ -44,10 +50,21 @@ Route.get('/buildingtype', async () => {
     return await building.buildingtype().fetch()
 });
 
-Route.get('/facultybuildings', async () => {
+Route.get('/buildings/department', async () => {
     const buildingType = await BuildingType.find(1)
     return await buildingType.buildings().fetch()
 });
+
+Route.get('/buildings/poi', async () => {
+    const buildingType = await BuildingType.find(2)
+    return await buildingType.buildings().fetch()
+});
+
+Route.get('/buildings/subtypes', async ({ request }) => {
+    const typeId = request.get('id').id
+    const buildingType = await BuildingType.find(typeId)
+    return await buildingType.subtypes().fetch()
+}); 
 
 Route.get('/facultybuildingss', async () => {
     const buildings = await Building
