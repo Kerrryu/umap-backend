@@ -23,6 +23,3 @@ Routes:
 /search?keyword={keyword}:
     Paramater: keyword (string to search for)
     Use: Returns a list of buildings using a search query with the keyword selected
-
-Change Building type to content type
-Remove relationship between location and buildings - merge this

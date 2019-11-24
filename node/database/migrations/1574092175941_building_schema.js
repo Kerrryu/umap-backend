@@ -8,7 +8,7 @@ class BuildingSchema extends Schema {
     this.create('buildings', (table) => {
       table.increments()
       table.string('name', 250).notNullable()
-      table.float('longtitude').notNullable()
+      table.float('longitude').notNullable()
       table.float('latitude').notNullable()
       table.integer('contenttype_id')
       table.integer('subtype_id')

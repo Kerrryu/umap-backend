@@ -18,6 +18,7 @@ const Route = use('Route')
 const Building = use('App/Models/Building')
 const ContentType = use('App/Models/ContentType')
 const Subtype = use('App/Models/Subtype')
+const Faculty = use('App/Models/Faculty')
 
 Route.on('/').render('welcome')
 
@@ -70,13 +71,13 @@ Route.get('/buildings/subtypes', async ({ request }) => {
 }); 
 
 Route.get('/search', async ({ request, response }) => {
-    const query = Building.query()
+    const bquery = Building.query()
 
     let keyword = request.input('keyword')
 
     if (keyword) {
         keyword = `%${decodeURIComponent(keyword)}%`
-        query
+        bquery
             .with('contenttype')
             .with('subtype')
             .whereHas('subtype', (building) => {
@@ -86,7 +87,21 @@ Route.get('/search', async ({ request, response }) => {
             .on('query', console.log)
     }
 
-    const buildings = await query.fetch()
+    const buildings = await bquery.fetch()
 
-    return response.json({ results: buildings.toJSON() })
+    const fquery = Faculty.query()
+
+    if(keyword) {
+        fquery
+            .with('office')
+            .where('name', 'like', keyword)
+    }
+
+    const faculties = await fquery.fetch()
+
+    return response.json({ results: buildings.toJSON(), faculties: faculties.toJSON() })
 });
+
+Route.get('/faculty', async ({ request }) => {
+    return await Faculty.query().with('office').fetch()
+})
