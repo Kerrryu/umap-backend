@@ -3,17 +3,20 @@
 /** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
 const Model = use('Model')
 
+const BuildingType = use('App/Models/ContentType')
+const BuildingSubtype = use('App/Models/Subtype')
+
 class Building extends Model {
     static get table () {
         return 'buildings'
     }
 
-    location () {
-        return this.hasOne('App/Models/BuildingLocation')
+    contenttype() {
+        return this.hasOne('App/Models/ContentType', 'contenttype_id', 'id')
     }
-
-    buildingtype () {
-        return this.hasOne('App/Models/BuildingType', 'type', 'id')
+    
+    subtype() {
+        return this.hasOne('App/Models/Subtype', 'subtype_id', 'id')
     }
 }
 
