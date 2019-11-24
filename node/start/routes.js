@@ -21,10 +21,6 @@ const BuildingSubtype = use('App/Models/BuildingSubtype')
 
 Route.on('/').render('welcome')
 
-Route.get('/hello', async () => {
-    return "Hello World"
-})
-
 Route.get('/buildings', async () => {
     const buildings = await Building
         .query()
@@ -50,8 +46,16 @@ Route.get('/buildingtype', async () => {
     return await building.buildingtype().fetch()
 });
 
-Route.get('/buildings/department', async () => {
+Route.get('/buildings/department', async ({ request }) => {
     const buildingType = await BuildingType.find(1)
+
+    if(request.input('subtype')) {
+        buildingType = buildingType.query().with('subtypes', (builder) => {
+            builder.where('name', '=', request.input('subtype'))
+        })
+        .fetch()
+    }
+
     return await buildingType.buildings().fetch()
 });
 
@@ -66,11 +70,23 @@ Route.get('/buildings/subtypes', async ({ request }) => {
     return await buildingType.subtypes().fetch()
 }); 
 
-Route.get('/facultybuildingss', async () => {
-    const buildings = await Building
-        .query()
-        .with('buildingtype', (builder) => {
-            builder.where('id', 1)
-        })
-        .fetch();
+Route.get('/search', async ({ request, response }) => {
+    const query = Building.query()
+
+    let keyword = request.input('keyword')
+
+    if (keyword) {
+        keyword = `%${decodeURIComponent(keyword)}%`
+        query
+            .with('buildingtype')
+            .whereHas('buildingtype', (building) => {
+                building.where('name', 'like', keyword)
+            })
+            .orWhere('name', 'like', keyword)
+            .on('query', console.log)
+    }
+
+    const buildings = await query.fetch()
+
+    return response.json({ results: buildings.toJSON() })
 });
