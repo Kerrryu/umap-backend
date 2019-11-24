@@ -1,0 +1,28 @@
+Routes:
+/buildings:
+    Use: Returns all the buildings with their name, type and location
+
+/buildings/location?id={id}:
+    Paramater: id (building id)
+    Use: returns the location of a building by it's id
+
+/buildingtype?id={id}:
+    Paramater: id (building id)
+    Use: returns the type of building the selected building is
+
+/buildings/department:
+    Use: returns all department buildings
+
+/buildings/poi:
+    Use: returns all poi buildings
+
+/buildings/subtypes?id={id}:
+    Paramater: id (building type id)
+    Use: Returns all subtypes for a specific building type
+
+/search?keyword={keyword}:
+    Paramater: keyword (string to search for)
+    Use: Returns a list of buildings using a search query with the keyword selected
+
+Change Building type to content type
+Remove relationship between location and buildings - merge this
