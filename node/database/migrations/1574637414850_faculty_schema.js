@@ -9,6 +9,7 @@ class FacultySchema extends Schema {
       table.increments()
       table.string('name', 250).notNullable()
       table.integer('office_id')
+      table.string('officehours')
     })
   }
 
